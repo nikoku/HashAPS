@@ -1,2 +1,0 @@
-# HashAPS
-Created with CodeSandbox
