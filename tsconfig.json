@@ -1,16 +1,11 @@
 {
-    "include": [
-        "./src/*"
-    ],
-    "compilerOptions": {
-        "lib": [
-            "dom",
-            "es2018"
-        ],
-        "jsx": "react",
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "noImplicitThis": true,
-        "noImplicitReturns": true,
-    }
+  "include": ["./src/*"],
+  "compilerOptions": {
+    "lib": ["dom", "es2018"],
+    "jsx": "react",
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true
+  }
 }

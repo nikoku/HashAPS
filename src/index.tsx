@@ -1,21 +1,59 @@
 import * as React from "react";
 import { render } from "react-dom";
 import ammoDataList from "./ammoList";
+import AmmoParret from "./AmmoParret";
+import Hash from "./hash";
+import uuid from "uuid";
 
 import "./styles.css";
 
-class App extends React.Component {
+interface AppState {
+  ammoSelectorId: string[];
+  diameter: number;
+}
+class App extends React.Component<{}, AppState> {
+  readonly hash: Hash;
+  constructor(props: Readonly<{}>) {
+    super(props);
+    this.hash = new Hash();
+    const ammoList = this.hash.ammoList;
+    const diameter = this.hash.diameter;
+    this.state = {
+      ammoSelectorId: ammoList,
+      diameter: diameter
+    };
+  }
   render() {
     return (
       <div>
         <div>
           <Header />
         </div>
-        <div>
-          <Middle />
+        <div style={{ display: "flex" }}>
+          <div>
+            <Hud />
+          </div>
+          <div>
+            <AmmoParret
+              ammoSelectorId={this.state.ammoSelectorId}
+              setAmmoList={ammoList => {
+                this.setState({ ammoSelectorId: ammoList });
+                setHash(ammoList);
+              }}
+            />
+          </div>
         </div>
-        <div>
-          <Footer />
+        <div style={{ display: "flex" }}>
+          <Footer
+            diameter={this.state.diameter}
+            onChange={event => {
+              let diameter: number = event.target.value;
+              if (diameter < 18) diameter = 18;
+              else if (500 < diameter) diameter = 500;
+              console.log(diameter);
+              this.setState({ diameter: diameter });
+            }}
+          />
         </div>
       </div>
     );
@@ -28,108 +66,36 @@ class Header extends React.Component {
   }
 }
 
-function Middle() {
-  return (
-    <>
-      <div style={{ float: "left" }}>
-        <Hud />
-      </div>
-      <div>
-        <AmmoParret />
-      </div>
-    </>
-  );
-}
-
 class Hud extends React.Component {
   render() {
     return <>{"Hud"}</>;
   }
 }
 
-interface AmmoSelectorProp {
-  isHead: boolean;
-  isRear: boolean;
-  value: string;
-  // onClick: (event: React.MouseEvent<HTMLSelectElement, MouseEvent>) => void;
-  onChange: (event: any) => void;
+interface FooterProp {
+  diameter: number;
+  onChange: (event) => void;
 }
-class AmmoSelector extends React.Component<AmmoSelectorProp> {
-  render() {
-    const option = ammoDataList
-      .filter(ammo => this.props.isHead || /[^a-z]/.test(ammo.id))
-      .filter(ammo => this.props.isRear || /[^0-5]/.test(ammo.id))
-      .map(ammo => <option value={ammo.id}>{ammo.name}</option>);
-    return (
-      <select value={this.props.value} onChange={this.props.onChange}>
-        {option}
-      </select>
-    );
-  }
-}
-
-interface AmmoParretState {
-  ammoSelectorId: string[];
-}
-class AmmoParret extends React.Component<{}, AmmoParretState> {
-  constructor(props: Readonly<{}>) {
-    super(props);
-    this.state = {
-      ammoSelectorId: ["a"]
-    };
-  }
-  render() {
-    return (
-      <ol>
-        {this.state.ammoSelectorId
-          .slice()
-          .reverse()
-          .map((selector, index, array) => (
-            <li>
-              <AmmoSelector
-                isHead={index === array.length - 1}
-                isRear={index === 0}
-                value={selector}
-                onChange={event => {
-                  const ammoSelectorId = this.state.ammoSelectorId;
-                  ammoSelectorId[array.length - 1 - index] = event.target.value;
-                  this.setState({ ammoSelectorId: ammoSelectorId });
-                }}
-              />
-              {array.length < 60 && (
-                <button
-                  onClick={() => {
-                    const ammoSelectorId = this.state.ammoSelectorId.slice();
-                    ammoSelectorId.splice(array.length - index, 0, "A");
-                    this.setState({ ammoSelectorId: ammoSelectorId });
-                  }}
-                >
-                  {"Add"}
-                </button>
-              )}
-              {index !== array.length - 1 && (
-                <button
-                  onClick={() => {
-                    const ammoSelectorId = this.state.ammoSelectorId.slice();
-                    ammoSelectorId.splice(array.length - index - 1, 1);
-                    this.setState({ ammoSelectorId: ammoSelectorId });
-                  }}
-                >
-                  {"Delete"}
-                </button>
-              )}
-            </li>
-          ))}
-      </ol>
-    );
-  }
-}
-
-class Footer extends React.Component {
-  render() {
-    return <>{"Footer"}</>;
-  }
+function Footer(props: FooterProp) {
+  return (
+    <>
+      <label>砲弾直径：</label>
+      <input
+        style={{ textAlign: "right" }}
+        defaultValue={props.diameter}
+        type={"number"}
+        max={500}
+        min={18}
+        onChange={props.onChange}
+      />
+      <label>（mm）</label>
+    </>
+  );
 }
 
 const rootElement = document.getElementById("root");
 render(<App />, rootElement);
+
+function setHash(ammoList: string[]) {
+  window.location.hash = ammoList.join("");
+}
