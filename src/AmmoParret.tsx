@@ -14,10 +14,11 @@ interface AmmoSelectorProp {
 }
 function AmmoSelector(props: AmmoSelectorProp) {
   const option = ammoDataList
+    .filter(ammo => ammo.id !== "-")
     .filter(ammo => props.isHead || /[^a-z]/.test(ammo.id))
     .filter(ammo => (props.isRear && !props.isHead) || /[^0-5]/.test(ammo.id))
     .map(ammo => (
-      <option key={uuid.v4()} value={ammo.id}>
+      <option key={uuid.v4()} value={ammo.id} disabled={ammo.id.length !== 1}>
         {ammo.name}
       </option>
     ));

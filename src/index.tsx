@@ -12,15 +12,12 @@ interface AppState {
   diameter: number;
 }
 class App extends React.Component<{}, AppState> {
-  readonly hash: Hash;
+  readonly hash = new Hash();
   constructor(props: Readonly<{}>) {
     super(props);
-    this.hash = new Hash();
-    const ammoList = this.hash.ammoList;
-    const diameter = this.hash.diameter;
     this.state = {
-      ammoSelectorId: ammoList,
-      diameter: diameter
+      ammoSelectorId: this.hash.ammoList,
+      diameter: this.hash.diameter
     };
   }
   render() {
@@ -38,7 +35,7 @@ class App extends React.Component<{}, AppState> {
               ammoSelectorId={this.state.ammoSelectorId}
               setAmmoList={ammoList => {
                 this.setState({ ammoSelectorId: ammoList });
-                setHash(ammoList);
+                this.hash.ammoList = ammoList;
               }}
             />
           </div>
@@ -47,11 +44,13 @@ class App extends React.Component<{}, AppState> {
           <Footer
             diameter={this.state.diameter}
             onChange={event => {
-              let diameter: number = event.target.value;
-              if (diameter < 18) diameter = 18;
-              else if (500 < diameter) diameter = 500;
-              console.log(diameter);
+              const diameter: number = limitBetween(
+                event.target.value,
+                18,
+                500
+              );
               this.setState({ diameter: diameter });
+              this.hash.diameter = diameter;
             }}
           />
         </div>
@@ -96,6 +95,6 @@ function Footer(props: FooterProp) {
 const rootElement = document.getElementById("root");
 render(<App />, rootElement);
 
-function setHash(ammoList: string[]) {
-  window.location.hash = ammoList.join("");
+function limitBetween(num: number, min: number, max: number) {
+  return num < min ? min : max < num ? max : num;
 }
