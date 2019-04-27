@@ -56,13 +56,12 @@ interface AmmoSelectorProp {
 }
 class AmmoSelector extends React.Component<AmmoSelectorProp> {
   render() {
-    const option = ammoDataList.map((ammo, index) => (
-      <option key={index} value={ammo.id}>
-        {ammo.name}
-      </option>
-    ));
+    const option = ammoDataList
+      .filter(ammo => this.props.isHead || /[^a-z]/.test(ammo.id))
+      .filter(ammo => this.props.isRear || /[^0-5]/.test(ammo.id))
+      .map(ammo => <option value={ammo.id}>{ammo.name}</option>);
     return (
-      <select defaultValue={this.props.value} onChange={this.props.onChange}>
+      <select value={this.props.value} onChange={this.props.onChange}>
         {option}
       </select>
     );
@@ -86,14 +85,14 @@ class AmmoParret extends React.Component<{}, AmmoParretState> {
           .slice()
           .reverse()
           .map((selector, index, array) => (
-            <li key={index}>
+            <li>
               <AmmoSelector
                 isHead={index === array.length - 1}
                 isRear={index === 0}
                 value={selector}
                 onChange={event => {
                   const ammoSelectorId = this.state.ammoSelectorId;
-                  ammoSelectorId[index] = event.target.value;
+                  ammoSelectorId[array.length - 1 - index] = event.target.value;
                   this.setState({ ammoSelectorId: ammoSelectorId });
                 }}
               />
@@ -101,14 +100,24 @@ class AmmoParret extends React.Component<{}, AmmoParretState> {
                 <button
                   onClick={() => {
                     const ammoSelectorId = this.state.ammoSelectorId.slice();
-                    ammoSelectorId.splice(index + 1, 0, "A");
+                    ammoSelectorId.splice(array.length - index, 0, "A");
                     this.setState({ ammoSelectorId: ammoSelectorId });
                   }}
                 >
                   {"Add"}
                 </button>
               )}
-              {index !== array.length - 1 && <button>{"Delete"}</button>}
+              {index !== array.length - 1 && (
+                <button
+                  onClick={() => {
+                    const ammoSelectorId = this.state.ammoSelectorId.slice();
+                    ammoSelectorId.splice(array.length - index - 1, 1);
+                    this.setState({ ammoSelectorId: ammoSelectorId });
+                  }}
+                >
+                  {"Delete"}
+                </button>
+              )}
             </li>
           ))}
       </ol>
