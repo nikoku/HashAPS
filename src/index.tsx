@@ -51,13 +51,21 @@ interface AmmoSelectorProp {
   isHead: boolean;
   isRear: boolean;
   value: string;
+  // onClick: (event: React.MouseEvent<HTMLSelectElement, MouseEvent>) => void;
+  onChange: (event: any) => void;
 }
 class AmmoSelector extends React.Component<AmmoSelectorProp> {
   render() {
-    const option = ammoDataList.map(ammo => (
-      <option value={ammo.id}>{ammo.name}</option>
+    const option = ammoDataList.map((ammo, index) => (
+      <option key={index} value={ammo.id}>
+        {ammo.name}
+      </option>
     ));
-    return <select value={this.props.value}>{option}</select>;
+    return (
+      <select defaultValue={this.props.value} onChange={this.props.onChange}>
+        {option}
+      </select>
+    );
   }
 }
 
@@ -83,6 +91,11 @@ class AmmoParret extends React.Component<{}, AmmoParretState> {
                 isHead={index === array.length - 1}
                 isRear={index === 0}
                 value={selector}
+                onChange={event => {
+                  const ammoSelectorId = this.state.ammoSelectorId;
+                  ammoSelectorId[index] = event.target.value;
+                  this.setState({ ammoSelectorId: ammoSelectorId });
+                }}
               />
               {array.length < 60 && (
                 <button
