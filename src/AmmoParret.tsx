@@ -79,7 +79,8 @@ function AmmoParret(props: AmmoParretProp) {
               onClick={() => {
                 const ammoSelectorId = props.ammoSelectorId.slice();
                 const currentId = ammoSelectorId[array.length - 1 - index];
-                ammoSelectorId.splice(array.length - index, 0, currentId);
+                const copyId = index !== array.length - 1 ? currentId : "A";
+                ammoSelectorId.splice(array.length - index, 0, copyId);
                 props.setAmmoList(ammoSelectorId);
               }}
               disabled={

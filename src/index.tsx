@@ -3,7 +3,6 @@ import { render } from "react-dom";
 import AmmoData from "./ammoList";
 import AmmoParret from "./AmmoParret";
 import Hash from "./hash";
-import uuid from "uuid";
 
 import "./styles.css";
 
@@ -13,7 +12,16 @@ interface AppState {
   gunpowder: number;
   railgun: number;
   ammoDataList: AmmoData[];
-  vvisibility: string;
+  visibility:
+    | "hidden"
+    | "visible"
+    | "-moz-initial"
+    | "inherit"
+    | "initial"
+    | "revert"
+    | "unset"
+    | "collapse"
+    | undefined;
 }
 class App extends React.Component<{}, AppState> {
   readonly hash = new Hash();
@@ -24,9 +32,10 @@ class App extends React.Component<{}, AppState> {
       diameter: this.hash.diameter,
       gunpowder: this.hash.gunpowder,
       railgun: this.hash.railgun,
+      ammoDataList: [],
       visibility: "hidden"
     };
-    AmmoData.fetch((json: AmmoData) => {
+    AmmoData.fetch((json: AmmoData[]) => {
       this.setState({ ammoDataList: json, visibility: "visible" });
     });
   }
@@ -58,7 +67,7 @@ class App extends React.Component<{}, AppState> {
             railgun={this.state.railgun}
             onDiameterChange={event => {
               const diameter: number = limitBetween(
-                event.target.value,
+                parseFloat(event.target.value),
                 18,
                 500
               );
@@ -67,15 +76,19 @@ class App extends React.Component<{}, AppState> {
             }}
             onGunpowderChange={event => {
               const gunpowder: number = limitBetween(
-                event.target.value,
+                parseInt(event.target.value),
                 0,
-                60 - this.state.ammoDataList.length - this.state.railgun
+                60
               );
               this.setState({ gunpowder: gunpowder });
               this.hash.gunpowder = gunpowder;
             }}
             onRailgunChange={event => {
-              const railgun: number = limitBetween(event.target.value, 0, 60);
+              const railgun: number = limitBetween(
+                parseInt(event.target.value),
+                0,
+                60
+              );
               this.setState({ railgun: railgun });
               this.hash.railgun = railgun;
             }}
@@ -98,13 +111,14 @@ class Hud extends React.Component {
   }
 }
 
+type ChangeFunctor = (event: React.ChangeEvent<HTMLInputElement>) => void;
 interface FooterProp {
   diameter: number;
   gunpowder: number;
   railgun: number;
-  onDiameterChange: (event) => void;
-  onGunpowderChange: (event) => void;
-  onRailgunChange: (event) => void;
+  onDiameterChange: ChangeFunctor;
+  onGunpowderChange: ChangeFunctor;
+  onRailgunChange: ChangeFunctor;
 }
 function Footer(props: FooterProp) {
   return (
@@ -117,7 +131,7 @@ function Footer(props: FooterProp) {
         </label>
         <input
           style={{ textAlign: "right" }}
-          defaultValue={props.gunpowder}
+          defaultValue={props.gunpowder.toString()}
           type={"number"}
           max={60}
           min={0}
@@ -130,7 +144,7 @@ function Footer(props: FooterProp) {
         </label>
         <input
           style={{ textAlign: "right" }}
-          defaultValue={props.railgun}
+          defaultValue={props.railgun.toString()}
           type={"number"}
           max={60}
           min={0}
@@ -141,7 +155,7 @@ function Footer(props: FooterProp) {
         <label>砲弾直径：</label>
         <input
           style={{ textAlign: "right" }}
-          defaultValue={props.diameter}
+          defaultValue={props.diameter.toString()}
           type={"number"}
           max={500}
           min={18}
