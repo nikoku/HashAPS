@@ -10,6 +10,8 @@ import "./styles.css";
 interface AppState {
   ammoSelectorId: string[];
   diameter: number;
+  gunpowder: number;
+  railgun: number;
   ammoDataList: AmmoData[];
   vvisibility: string;
 }
@@ -20,6 +22,8 @@ class App extends React.Component<{}, AppState> {
     this.state = {
       ammoSelectorId: this.hash.ammoList,
       diameter: this.hash.diameter,
+      gunpowder: this.hash.gunpowder,
+      railgun: this.hash.railgun,
       visibility: "hidden"
     };
     AmmoData.fetch((json: AmmoData) => {
@@ -47,10 +51,12 @@ class App extends React.Component<{}, AppState> {
             />
           </div>
         </div>
-        <div style={{ display: "flex" }}>
+        <div>
           <Footer
             diameter={this.state.diameter}
-            onChange={event => {
+            gunpowder={this.state.gunpowder}
+            railgun={this.state.railgun}
+            onDiameterChange={event => {
               const diameter: number = limitBetween(
                 event.target.value,
                 18,
@@ -58,6 +64,20 @@ class App extends React.Component<{}, AppState> {
               );
               this.setState({ diameter: diameter });
               this.hash.diameter = diameter;
+            }}
+            onGunpowderChange={event => {
+              const gunpowder: number = limitBetween(
+                event.target.value,
+                0,
+                60 - this.state.ammoDataList.length - this.state.railgun
+              );
+              this.setState({ gunpowder: gunpowder });
+              this.hash.gunpowder = gunpowder;
+            }}
+            onRailgunChange={event => {
+              const railgun: number = limitBetween(event.target.value, 0, 60);
+              this.setState({ railgun: railgun });
+              this.hash.railgun = railgun;
             }}
           />
         </div>
@@ -80,21 +100,55 @@ class Hud extends React.Component {
 
 interface FooterProp {
   diameter: number;
-  onChange: (event) => void;
+  gunpowder: number;
+  railgun: number;
+  onDiameterChange: (event) => void;
+  onGunpowderChange: (event) => void;
+  onRailgunChange: (event) => void;
 }
 function Footer(props: FooterProp) {
   return (
     <>
-      <label>砲弾直径：</label>
-      <input
-        style={{ textAlign: "right" }}
-        defaultValue={props.diameter}
-        type={"number"}
-        max={500}
-        min={18}
-        onChange={props.onChange}
-      />
-      <label>（mm）</label>
+      <div style={{ display: "flex" }}>
+        <label>
+          Gunpowder
+          <br />
+          Casing
+        </label>
+        <input
+          style={{ textAlign: "right" }}
+          defaultValue={props.gunpowder}
+          type={"number"}
+          max={60}
+          min={0}
+          onChange={props.onGunpowderChange}
+        />
+        <label>
+          Railgun
+          <br />
+          Casing
+        </label>
+        <input
+          style={{ textAlign: "right" }}
+          defaultValue={props.railgun}
+          type={"number"}
+          max={60}
+          min={0}
+          onChange={props.onRailgunChange}
+        />
+      </div>
+      <div style={{ display: "flex" }}>
+        <label>砲弾直径：</label>
+        <input
+          style={{ textAlign: "right" }}
+          defaultValue={props.diameter}
+          type={"number"}
+          max={500}
+          min={18}
+          onChange={props.onDiameterChange}
+        />
+        <label>（mm）</label>
+      </div>
     </>
   );
 }
