@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render } from "react-dom";
-import ammoDataList from "./ammoList";
+import AmmoData from "./ammoList";
 import AmmoParret from "./AmmoParret";
 import Hash from "./hash";
 import uuid from "uuid";
@@ -10,6 +10,7 @@ import "./styles.css";
 interface AppState {
   ammoSelectorId: string[];
   diameter: number;
+  ammoDataList: AmmoData[];
 }
 class App extends React.Component<{}, AppState> {
   readonly hash = new Hash();
@@ -19,6 +20,9 @@ class App extends React.Component<{}, AppState> {
       ammoSelectorId: this.hash.ammoList,
       diameter: this.hash.diameter
     };
+    AmmoData.fetch((json: AmmoData) => {
+      this.setState({ ammoDataList: json });
+    });
   }
   render() {
     return (
@@ -37,6 +41,7 @@ class App extends React.Component<{}, AppState> {
                 this.setState({ ammoSelectorId: ammoList });
                 this.hash.ammoList = ammoList;
               }}
+              ammoDataList={this.state.ammoDataList}
             />
           </div>
         </div>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render } from "react-dom";
-import ammoDataList from "./ammoList";
+import AmmoData from "./ammoList";
 import uuid from "uuid";
 
 import "./styles.css";
@@ -9,33 +9,52 @@ interface AmmoSelectorProp {
   isHead: boolean;
   isRear: boolean;
   value: string;
-  // onClick: (event: React.MouseEvent<HTMLSelectElement, MouseEvent>) => void;
+  ammoDataList: AmmoData[];
   onChange: (event: any) => void;
 }
-function AmmoSelector(props: AmmoSelectorProp) {
-  const option = ammoDataList
-    .filter(ammo => ammo.id !== "-")
-    .filter(ammo => props.isHead || /[^a-z]/.test(ammo.id))
-    .filter(ammo => (props.isRear && !props.isHead) || /[^0-5]/.test(ammo.id))
-    .map(ammo => (
-      <option key={uuid.v4()} value={ammo.id} disabled={ammo.id.length !== 1}>
-        {ammo.name}
-      </option>
-    ));
-  return (
-    <select
-      key={uuid.v4()}
-      defaultValue={props.value}
-      onChange={props.onChange}
-    >
-      {option}
-    </select>
-  );
+class AmmoSelector extends React.Component<AmmoSelectorProp> {
+  constructor(props: AmmoSelectorProp) {
+    super(props);
+  }
+  render() {
+    const option = (this.props.ammoDataList || [])
+      .filter(ammo => ammo.id !== "-")
+      .filter(ammo => this.props.isHead || /[^a-z]/.test(ammo.id))
+      .filter(
+        ammo =>
+          (this.props.isRear && !this.props.isHead) || /[^0-5]/.test(ammo.id)
+      )
+      .map(ammo => {
+        const disabled = ammo.id.length !== 1;
+        const color = disabled ? "whitesmoke" : "black";
+        const bgColor = disabled ? "chocolate" : "#e0e0e0";
+        return (
+          <option
+            key={uuid.v4()}
+            value={ammo.id}
+            disabled={disabled}
+            style={{ color: color, backgroundColor: bgColor }}
+          >
+            {ammo.name}
+          </option>
+        );
+      });
+    return (
+      <select
+        key={uuid.v4()}
+        defaultValue={this.props.value}
+        onChange={this.props.onChange}
+      >
+        {option}
+      </select>
+    );
+  }
 }
 
 interface AmmoParretProp {
   ammoSelectorId: string[];
   setAmmoList: (ammoList: string[]) => void;
+  ammoDataList: AmmoData[];
 }
 function AmmoParret(props: AmmoParretProp) {
   return (
@@ -49,6 +68,7 @@ function AmmoParret(props: AmmoParretProp) {
               isHead={index === array.length - 1}
               isRear={index === 0}
               value={selector}
+              ammoDataList={props.ammoDataList}
               onChange={event => {
                 const ammoSelectorId = props.ammoSelectorId.slice();
                 ammoSelectorId[array.length - 1 - index] = event.target.value;
@@ -58,7 +78,8 @@ function AmmoParret(props: AmmoParretProp) {
             <button
               onClick={() => {
                 const ammoSelectorId = props.ammoSelectorId.slice();
-                ammoSelectorId.splice(array.length - index, 0, "A");
+                const currentId = ammoSelectorId[array.length - 1 - index];
+                ammoSelectorId.splice(array.length - index, 0, currentId);
                 props.setAmmoList(ammoSelectorId);
               }}
               disabled={
