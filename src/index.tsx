@@ -11,6 +11,7 @@ interface AppState {
   ammoSelectorId: string[];
   diameter: number;
   ammoDataList: AmmoData[];
+  vvisibility: string;
 }
 class App extends React.Component<{}, AppState> {
   readonly hash = new Hash();
@@ -18,10 +19,11 @@ class App extends React.Component<{}, AppState> {
     super(props);
     this.state = {
       ammoSelectorId: this.hash.ammoList,
-      diameter: this.hash.diameter
+      diameter: this.hash.diameter,
+      visibility: "hidden"
     };
     AmmoData.fetch((json: AmmoData) => {
-      this.setState({ ammoDataList: json });
+      this.setState({ ammoDataList: json, visibility: "visible" });
     });
   }
   render() {
@@ -30,7 +32,7 @@ class App extends React.Component<{}, AppState> {
         <div>
           <Header />
         </div>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", visibility: this.state.visibility }}>
           <div>
             <Hud />
           </div>
@@ -66,7 +68,7 @@ class App extends React.Component<{}, AppState> {
 
 class Header extends React.Component {
   render() {
-    return <>{"Header"}</>;
+    return <>Hash APS</>;
   }
 }
 
