@@ -15,7 +15,6 @@ class Hash {
   readonly gunpowderReg = /[0-9a-zA-Z](?=[0-9a-zA-Z]$)/;
   readonly railgunReg = /[0-9a-zA-Z](?=$)/;
   get ammoList(): string[] {
-    console.log(decodeHash62);
     const hash = window.location.hash;
     const ammoHash = hash.match(this.ammoReg) || ["a"];
     return ammoHash[0].split("");
