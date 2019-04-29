@@ -15,7 +15,7 @@ class AmmoData {
       "https://script.google.com/macros/s/AKfycbyu9VW7EPHyQlzcOL0V5LyKhiKQpIJms_yXy_YvQ7yJUNqFD6c8/exec";
     fetch(apiUrl, { mode: "cors" })
       .then(response => response.json())
-      .then(json => json.map(obj => new AmmoData(obj)))
+      .then(json => json.map((obj: any) => new AmmoData(obj)))
       .then((json: AmmoData[]) => {
         onFinish(json);
       })

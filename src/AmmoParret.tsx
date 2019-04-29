@@ -58,12 +58,18 @@ interface AmmoParretProp {
 }
 function AmmoParret(props: AmmoParretProp) {
   return (
-    <ol>
+    <ol
+      style={{
+        overflowY: "scroll",
+        listStylePosition: "inside",
+        paddingLeft: 0
+      }}
+    >
       {props.ammoSelectorId
         .slice()
         .reverse()
         .map((selector, index, array) => (
-          <li key={uuid.v4()}>
+          <li key={uuid.v4()} style={{ listStylePosition: "inside" }}>
             <AmmoSelector
               isHead={index === array.length - 1}
               isRear={index === 0}

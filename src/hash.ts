@@ -1,9 +1,10 @@
-const hash62 = [].concat(
-  [...Array(10).keys()].map(i => i.toString()),
-  [...Array(26).keys()].map(i => String.fromCharCode("a".charCodeAt(0) + i)),
-  [...Array(26).keys()].map(i => String.fromCharCode("A".charCodeAt(0) + i))
-);
-const decodeHash62 = [...hash62.entries()].reduce((accum, current) => {
+const hash62 = [...Array(10).keys()]
+  .map(i => i.toString())
+  .concat(
+    [...Array(26).keys()].map(i => String.fromCharCode("a".charCodeAt(0) + i)),
+    [...Array(26).keys()].map(i => String.fromCharCode("A".charCodeAt(0) + i))
+  );
+const decodeHash62 = [...hash62.entries()].reduce((accum: any, current) => {
   accum[current[1]] = current[0];
   return accum;
 }, {});
