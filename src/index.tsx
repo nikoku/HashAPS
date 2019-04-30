@@ -117,7 +117,7 @@ class App extends React.Component<{}, AppState> {
             railgun={this.state.railgun}
             onDiameterChange={event => {
               const diameter: number = limitBetween(
-                parseFloat(event.target.value),
+                parseFloat(event.target.value) || 0,
                 18,
                 500
               );
