@@ -1,7 +1,7 @@
 class AmmoData {
   readonly id: string;
   readonly name: string;
-  readonly speed: number;
+  private readonly speed: number;
   readonly ap: number;
   readonly kd: number;
   readonly detect: number;
@@ -9,6 +9,9 @@ class AmmoData {
   readonly maxLength: number;
   constructor(init: Partial<AmmoData>) {
     Object.assign(this, init);
+  }
+  speedCofficient(index: number) {
+    return this.speed * 0.75 ** index;
   }
   static fetch(onFinish: (param: any) => void) {
     const apiUrl =

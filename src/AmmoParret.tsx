@@ -60,16 +60,14 @@ function AmmoParret(props: AmmoParretProp) {
   return (
     <ol
       style={{
-        overflowY: "scroll",
-        listStylePosition: "inside",
-        paddingLeft: 0
+        overflowY: "scroll"
       }}
     >
       {props.ammoSelectorId
         .slice()
         .reverse()
         .map((selector, index, array) => (
-          <li key={uuid.v4()} style={{ listStylePosition: "inside" }}>
+          <li key={uuid.v4()}>
             <AmmoSelector
               isHead={index === array.length - 1}
               isRear={index === 0}

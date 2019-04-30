@@ -1,7 +1,9 @@
 import * as React from "react";
 import { render, findDOMNode } from "react-dom";
+import EventListener from "react-event-listener";
 import AmmoData from "./ammoList";
 import AmmoParret from "./AmmoParret";
+import CaluculateSpeed from "./CaluculateSpeed";
 import AmmoLength from "./AmmoLength";
 import Hash from "./hash";
 
@@ -68,9 +70,14 @@ class App extends React.Component<{}, AppState> {
           display: "inline-block",
           position: "relative",
           marginRight: "8px",
-          height: "100%"
+          height: "100%",
+          width: "max-content"
         }}
       >
+        <EventListener
+          target="window"
+          onResize={() => this.componentDidUpdate()}
+        />
         <div>
           <Header />
         </div>
@@ -95,7 +102,14 @@ class App extends React.Component<{}, AppState> {
         </div>
         <div
           id="footer"
-          style={{ position: "absolute", left: 0, bottom: 0, right: 0 }}
+          style={{
+            position: "absolute",
+            left: 0,
+            bottom: 0,
+            right: 0,
+            width: "max-content",
+            textAlign: "-webkit-right"
+          }}
         >
           <Footer
             diameter={this.state.diameter}
@@ -128,6 +142,13 @@ class App extends React.Component<{}, AppState> {
               this.setState({ railgun: railgun });
               this.hash.railgun = railgun;
             }}
+          />
+          <CaluculateSpeed
+            diameter={this.state.diameter}
+            gunpowder={this.state.gunpowder}
+            railgun={this.state.railgun}
+            ammoSelectorId={this.state.ammoSelectorId}
+            ammoDataList={this.state.ammoDataList}
           />
           <AmmoLength
             ammoSelectorId={this.state.ammoSelectorId}
