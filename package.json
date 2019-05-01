@@ -1,5 +1,5 @@
 {
-  "name": "new",
+  "name": "hash-aps",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -10,7 +10,6 @@
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-event-listener": "0.6.6",
-    "react-scripts": "3.0.0",
     "uuid": "3.3.2",
     "velocity-react": "1.4.1"
   },

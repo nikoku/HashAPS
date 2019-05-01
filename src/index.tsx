@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, findDOMNode } from "react-dom";
+import { render } from "react-dom";
 import EventListener from "react-event-listener";
 import AmmoData from "./ammoList";
 import AmmoParret from "./AmmoParret";
