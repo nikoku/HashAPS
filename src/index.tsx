@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, findDOMNode } from "react-dom";
+import { render } from "react-dom";
 import EventListener from "react-event-listener";
 import AmmoData from "./ammoList";
 import AmmoParret from "./AmmoParret";
@@ -117,7 +117,7 @@ class App extends React.Component<{}, AppState> {
             railgun={this.state.railgun}
             onDiameterChange={event => {
               const diameter: number = limitBetween(
-                parseFloat(event.target.value),
+                parseFloat(event.target.value) || 0,
                 18,
                 500
               );
