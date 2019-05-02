@@ -1,12 +1,12 @@
 class AmmoData {
-  readonly id: string;
-  readonly name: string;
-  private readonly speed: number;
-  readonly ap: number;
-  readonly kd: number;
-  readonly detect: number;
-  readonly health: number;
-  readonly maxLength: number;
+  readonly id: string = "";
+  readonly name: string = "";
+  private readonly speed: number = 0;
+  readonly ap: number = 0;
+  readonly kd: number = 0;
+  readonly detect: number = 0;
+  readonly health: number = 0;
+  readonly maxLength: number = 0;
   constructor(init: Partial<AmmoData>) {
     Object.assign(this, init);
   }
