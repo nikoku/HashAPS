@@ -126,7 +126,7 @@ class App extends React.Component<{}, AppState> {
             }}
             onGunpowderChange={event => {
               const gunpowder: number = limitBetween(
-                parseInt(event.target.value),
+                parseInt(event.target.value) || 0,
                 0,
                 60
               );
@@ -135,7 +135,7 @@ class App extends React.Component<{}, AppState> {
             }}
             onRailgunChange={event => {
               const railgun: number = limitBetween(
-                parseInt(event.target.value),
+                parseInt(event.target.value) || 0,
                 0,
                 60
               );
@@ -163,7 +163,7 @@ class App extends React.Component<{}, AppState> {
 }
 
 function Header() {
-  return <>Hash APS</>;
+  return <>Hash APS(β)</>;
 }
 
 type ChangeFunctor = (event: React.ChangeEvent<HTMLInputElement>) => void;
