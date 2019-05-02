@@ -107,11 +107,9 @@ class App extends React.Component<{}, AppState> {
           style={
             {
               position: "absolute",
-              left: 0,
               bottom: 0,
               right: 0,
-              width: "max-content",
-              textAlign: "-webkit-right"
+              width: "max-content"
             } as React.CSSProperties
           }
         >
