@@ -66,13 +66,15 @@ class App extends React.Component<{}, AppState> {
       </>
     ) : (
       <div
-        style={{
-          display: "inline-block",
-          position: "relative",
-          marginRight: "8px",
-          height: "100%",
-          width: "max-content"
-        }}
+        style={
+          {
+            display: "inline-block",
+            position: "relative",
+            marginRight: "8px",
+            height: "100%",
+            width: "max-content"
+          } as React.CSSProperties
+        }
       >
         <EventListener
           target="window"
@@ -102,14 +104,14 @@ class App extends React.Component<{}, AppState> {
         </div>
         <div
           id="footer"
-          style={{
-            position: "absolute",
-            left: 0,
-            bottom: 0,
-            right: 0,
-            width: "max-content",
-            textAlign: "-webkit-right"
-          }}
+          style={
+            {
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              width: "max-content"
+            } as React.CSSProperties
+          }
         >
           <Footer
             diameter={this.state.diameter}
