@@ -28,7 +28,7 @@ function AmmoLength(props: AmmoLengthProp) {
   const length = props.ammoDataList.length === 0 ? 0 : getLength();
   return (
     <>
-      <div style={{ textAlign: "right", width: "max-content" }}>
+      <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
         <label style={{ whiteSpace: "nowrap", right: 0, fontSize: 14 }}>
           モジュール：
           <input
@@ -41,7 +41,7 @@ function AmmoLength(props: AmmoLengthProp) {
           [個]
         </label>
       </div>
-      <div style={{ textAlign: "right", width: "max-content" }}>
+      <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
         <label style={{ whiteSpace: "nowrap", right: 0, fontSize: 14 }}>
           弾薬長：
           <input
