@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render } from "react-dom";
 import AmmoData from "./ammoList";
-import { sentence, lang } from "./sentence";
+import { sentence } from "./sentence";
 
 import "./styles.css";
 
@@ -30,8 +30,8 @@ function AmmoLength(props: AmmoLengthProp) {
   return (
     <>
       <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
-        <label style={{ whiteSpace: "nowrap", right: 0, fontSize: 14 }}>
-          {sentence["module"][lang]}：
+        <label style={{ whiteSpace: "nowrap", right: 0 }}>
+          {sentence["module"]}：
           <input
             type={"number"}
             style={{ textAlign: "right" }}
@@ -43,8 +43,8 @@ function AmmoLength(props: AmmoLengthProp) {
         </label>
       </div>
       <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
-        <label style={{ whiteSpace: "nowrap", right: 0, fontSize: 14 }}>
-          {sentence["shell length"][lang]}：
+        <label style={{ whiteSpace: "nowrap", right: 0 }}>
+          {sentence["shell length"]}：
           <input
             type={"number"}
             style={{ textAlign: "right" }}

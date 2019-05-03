@@ -42,3 +42,7 @@ body,
   display: flex;
   flex-direction: column;
 }
+
+label {
+  font-size: 14px;
+}

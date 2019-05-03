@@ -9,7 +9,7 @@ import CaluculateSpeed from "./CaluculateSpeed";
 import AmmoLength from "./AmmoLength";
 import LoaderCalculate from "./LoaderCalculate";
 import Hash from "./hash";
-import { sentence, lang } from "./sentence";
+import { sentence } from "./sentence";
 
 import "./styles.css";
 
@@ -45,6 +45,19 @@ class App extends React.Component<{}, AppState> {
     AmmoData.fetch((json: AmmoData[]) => {
       this.setState({ ammoDataList: json, visibility: "visible" });
     });
+  }
+  private get ammoLength() {
+    const ammoList = this.state.ammoSelectorId.map(id =>
+      this.state.ammoDataList.find(data => data.id === id)
+    );
+    return this.state.ammoDataList.length === 0
+      ? 0
+      : ammoList.reduce(
+          (accum, current) =>
+            accum + Math.min(current!.maxLength, this.state.diameter),
+          0
+        ) +
+          (this.state.gunpowder + this.state.railgun) * this.state.diameter;
   }
   ammoCustomiser() {
     return (
@@ -141,7 +154,12 @@ class App extends React.Component<{}, AppState> {
   }
 
   loaderCaluculator() {
-    return <LoaderCalculate />;
+    return (
+      <LoaderCalculate
+        diameter={this.state.diameter}
+        length={this.ammoLength}
+      />
+    );
   }
 
   junctionMobile() {
@@ -207,9 +225,7 @@ function Footer(props: FooterProp) {
         <div
           style={{ display: "flex", marginLeft: "auto", marginBottom: "8px" }}
         >
-          <label className="CasingLabel">
-            {sentence["gunpowder casing"][lang]}
-          </label>
+          <label className="CasingLabel">{sentence["gunpowder casing"]}</label>
           <input
             style={{
               textAlign: "right",
@@ -222,9 +238,7 @@ function Footer(props: FooterProp) {
             min={0}
             onChange={props.onGunpowderChange}
           />
-          <label className="CasingLabel">
-            {sentence["railgun casing"][lang]}
-          </label>
+          <label className="CasingLabel">{sentence["railgun casing"]}</label>
           <input
             style={{ textAlign: "right", marginLeft: "8px" }}
             defaultValue={props.railgun.toString()}
@@ -237,7 +251,7 @@ function Footer(props: FooterProp) {
       </div>
       <div style={{ display: "flex", marginBottom: "8px" }}>
         <label style={{ display: "block", marginLeft: "auto", fontSize: 14 }}>
-          {sentence["diameter"][lang]}：
+          {sentence["diameter"]}：
           <input
             style={{ textAlign: "right" }}
             defaultValue={props.diameter.toString()}
