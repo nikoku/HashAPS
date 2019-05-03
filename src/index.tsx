@@ -1,6 +1,8 @@
 import * as React from "react";
 import { render } from "react-dom";
 import EventListener from "react-event-listener";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 import AmmoData from "./ammoList";
 import AmmoParret from "./AmmoParret";
 import CaluculateSpeed from "./CaluculateSpeed";
@@ -16,6 +18,7 @@ interface AppState {
   railgun: number;
   ammoDataList: AmmoData[];
   middleHeight: number;
+  tabHeight: number;
   visibility:
     | "hidden"
     | "visible"
@@ -38,6 +41,7 @@ class App extends React.Component<{}, AppState> {
       railgun: this.hash.railgun,
       ammoDataList: [],
       middleHeight: 0,
+      tabHeight: 0,
       visibility: "hidden"
     };
     AmmoData.fetch((json: AmmoData[]) => {
@@ -45,34 +49,36 @@ class App extends React.Component<{}, AppState> {
     });
   }
   componentDidUpdate() {
-    const middleTop = document.getElementById("middle")!.getBoundingClientRect()
-      .top;
-    const fotterTop = document.getElementById("footer")!.getBoundingClientRect()
-      .top;
-    const middleHeight = fotterTop - middleTop;
-    const prevMiddleHeight = this.state.middleHeight;
-    if (middleHeight !== prevMiddleHeight && middleHeight !== 0) {
-      this.setState({ middleHeight: middleHeight });
-    }
+    // const middleTop = document.getElementById("middle")!.getBoundingClientRect()
+    //   .top;
+    // const fotterTop = document.getElementById("footer")!.getBoundingClientRect()
+    //   .top;
+    // const rootElement = document.getElementById("root")!;
+    // const rootBottom = rootElement.getBoundingClientRect().bottom - 8;
+    // const middleHeight = fotterTop - middleTop;
+    // const tabHeight = rootBottom - middleTop;
+    // const prevMiddleHeight = this.state.middleHeight;
+    // const prevTabHeight = this.state.tabHeight;
+    // if (
+    //   (middleHeight !== prevMiddleHeight && middleHeight !== 0) ||
+    //   (tabHeight !== prevTabHeight && tabHeight !== 0)
+    // ) {
+    //   this.setState({ middleHeight: middleHeight, tabHeight: tabHeight });
+    // }
   }
-  render() {
-    return this.state.ammoDataList.length === 0 ? (
-      <>
-        <Header />
-        <br />
-        <br />
-        <br />
-        <label>Now Loading...</label>
-      </>
-    ) : (
+  ammoCustomiser() {
+    return (
       <div
         style={
           {
-            display: "inline-block",
+            display: "flex",
+            flexDirection: "column",
+            flex: "auto",
             position: "relative",
             marginRight: "8px",
-            height: "100%",
-            width: "max-content"
+            // height: this.state.tabHeight,
+            width: "max-content",
+            height: "100%"
           } as React.CSSProperties
         }
       >
@@ -80,17 +86,15 @@ class App extends React.Component<{}, AppState> {
           target="window"
           onResize={() => this.componentDidUpdate()}
         />
-        <div>
-          <Header />
-        </div>
         <div
           id="middle"
           style={{
-            top: 0,
-            bottom: 0,
-            height: this.state.middleHeight,
             display: "flex",
-            visibility: this.state.visibility
+            visibility: this.state.visibility,
+            flex: "auto",
+            paddingBottom: 8,
+            bottom: 0,
+            position: "relative"
           }}
         >
           <AmmoParret
@@ -106,10 +110,8 @@ class App extends React.Component<{}, AppState> {
           id="footer"
           style={
             {
-              position: "absolute",
-              bottom: 0,
-              right: 0,
-              width: "max-content"
+              width: "max-content",
+              flex: "none"
             } as React.CSSProperties
           }
         >
@@ -162,10 +164,39 @@ class App extends React.Component<{}, AppState> {
       </div>
     );
   }
+
+  render() {
+    return (
+      <>
+        <Header />
+        {this.state.ammoDataList.length === 0 ? (
+          <>
+            <br />
+            <br />
+            <br />
+            <label>Now Loading...</label>
+          </>
+        ) : (
+          <>
+            <Tabs className="react-tabs Tabs">
+              <TabList className="react-tabs__tab-list TabList">
+                <Tab>Customiser</Tab>
+                <Tab>Loader</Tab>
+              </TabList>
+              <TabPanel className="react-tabs__tab-panel TabPanel">
+                {this.ammoCustomiser()}
+              </TabPanel>
+              <TabPanel>Fuga</TabPanel>
+            </Tabs>
+          </>
+        )}
+      </>
+    );
+  }
 }
 
 function Header() {
-  return <>Hash APS(β)</>;
+  return <h1 style={{ flex: "none" }}>Hash APS(β)</h1>;
 }
 
 type ChangeFunctor = (event: React.ChangeEvent<HTMLInputElement>) => void;

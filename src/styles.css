@@ -13,4 +13,18 @@ body,
 
 #root {
   padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.Tabs,
+.TabPanel {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.TabList {
+  flex: none;
 }
