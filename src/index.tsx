@@ -163,7 +163,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   junctionMobile() {
-    return isMobile() ? (
+    return isMobile.phone ? (
       <Tabs
         className="react-tabs Tabs"
         selectedTabPanelClassName="react-tabs__tab-panel--selected SelectedTabPanel"
