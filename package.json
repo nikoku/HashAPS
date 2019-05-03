@@ -8,7 +8,7 @@
     "@types/ismobilejs": "0.4.1",
     "@types/react-tabs": "2.3.1",
     "@types/uuid": "3.4.4",
-    "is-mobile": "2.0.0",
+    "ismobilejs": "0.5.1",
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-scripts": "3.0.0",
