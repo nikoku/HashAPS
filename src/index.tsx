@@ -2,7 +2,7 @@ import * as React from "react";
 import { render } from "react-dom";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import isMobile from "is-mobile";
+import isMobile from "ismobilejs";
 import AmmoData from "./ammoList";
 import AmmoParret from "./AmmoParret";
 import CaluculateSpeed from "./CaluculateSpeed";
