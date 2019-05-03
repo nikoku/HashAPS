@@ -1,13 +1,15 @@
 import * as React from "react";
 import { render } from "react-dom";
-import EventListener from "react-event-listener";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import isMobile from "is-mobile";
 import AmmoData from "./ammoList";
 import AmmoParret from "./AmmoParret";
 import CaluculateSpeed from "./CaluculateSpeed";
 import AmmoLength from "./AmmoLength";
+import LoaderCalculate from "./LoaderCalculate";
 import Hash from "./hash";
+import { sentence, lang } from "./sentence";
 
 import "./styles.css";
 
@@ -17,8 +19,6 @@ interface AppState {
   gunpowder: number;
   railgun: number;
   ammoDataList: AmmoData[];
-  middleHeight: number;
-  tabHeight: number;
   visibility:
     | "hidden"
     | "visible"
@@ -40,31 +40,11 @@ class App extends React.Component<{}, AppState> {
       gunpowder: this.hash.gunpowder,
       railgun: this.hash.railgun,
       ammoDataList: [],
-      middleHeight: 0,
-      tabHeight: 0,
       visibility: "hidden"
     };
     AmmoData.fetch((json: AmmoData[]) => {
       this.setState({ ammoDataList: json, visibility: "visible" });
     });
-  }
-  componentDidUpdate() {
-    // const middleTop = document.getElementById("middle")!.getBoundingClientRect()
-    //   .top;
-    // const fotterTop = document.getElementById("footer")!.getBoundingClientRect()
-    //   .top;
-    // const rootElement = document.getElementById("root")!;
-    // const rootBottom = rootElement.getBoundingClientRect().bottom - 8;
-    // const middleHeight = fotterTop - middleTop;
-    // const tabHeight = rootBottom - middleTop;
-    // const prevMiddleHeight = this.state.middleHeight;
-    // const prevTabHeight = this.state.tabHeight;
-    // if (
-    //   (middleHeight !== prevMiddleHeight && middleHeight !== 0) ||
-    //   (tabHeight !== prevTabHeight && tabHeight !== 0)
-    // ) {
-    //   this.setState({ middleHeight: middleHeight, tabHeight: tabHeight });
-    // }
   }
   ammoCustomiser() {
     return (
@@ -73,19 +53,14 @@ class App extends React.Component<{}, AppState> {
           {
             display: "flex",
             flexDirection: "column",
-            flex: "auto",
+            flex: "none",
             position: "relative",
             marginRight: "8px",
-            // height: this.state.tabHeight,
             width: "max-content",
             height: "100%"
           } as React.CSSProperties
         }
       >
-        <EventListener
-          target="window"
-          onResize={() => this.componentDidUpdate()}
-        />
         <div
           id="middle"
           style={{
@@ -165,6 +140,34 @@ class App extends React.Component<{}, AppState> {
     );
   }
 
+  loaderCaluculator() {
+    return <LoaderCalculate />;
+  }
+
+  junctionMobile() {
+    return isMobile() ? (
+      <Tabs
+        className="react-tabs Tabs"
+        selectedTabPanelClassName="react-tabs__tab-panel--selected SelectedTabPanel"
+      >
+        <TabList className="react-tabs__tab-list TabList">
+          <Tab>Customiser</Tab>
+          <Tab>Loader</Tab>
+        </TabList>
+        <TabPanel className="react-tabs__tab-panel TabPanel">
+          {this.ammoCustomiser()}
+        </TabPanel>
+        <TabPanel className="react-tabs__tab-panel TabPanel">
+          {this.loaderCaluculator()}
+        </TabPanel>
+      </Tabs>
+    ) : (
+      <div style={{ display: "flex", height: "100%" }}>
+        {this.ammoCustomiser()}
+        {this.loaderCaluculator()}
+      </div>
+    );
+  }
   render() {
     return (
       <>
@@ -177,18 +180,7 @@ class App extends React.Component<{}, AppState> {
             <label>Now Loading...</label>
           </>
         ) : (
-          <>
-            <Tabs className="react-tabs Tabs">
-              <TabList className="react-tabs__tab-list TabList">
-                <Tab>Customiser</Tab>
-                <Tab>Loader</Tab>
-              </TabList>
-              <TabPanel className="react-tabs__tab-panel TabPanel">
-                {this.ammoCustomiser()}
-              </TabPanel>
-              <TabPanel>Fuga</TabPanel>
-            </Tabs>
-          </>
+          this.junctionMobile()
         )}
       </>
     );
@@ -215,10 +207,8 @@ function Footer(props: FooterProp) {
         <div
           style={{ display: "flex", marginLeft: "auto", marginBottom: "8px" }}
         >
-          <label style={{ fontSize: 12 }}>
-            Gunpowder
-            <br />
-            Casing
+          <label className="CasingLabel">
+            {sentence["gunpowder casing"][lang]}
           </label>
           <input
             style={{
@@ -232,10 +222,8 @@ function Footer(props: FooterProp) {
             min={0}
             onChange={props.onGunpowderChange}
           />
-          <label style={{ fontSize: 12 }}>
-            Railgun
-            <br />
-            Casing
+          <label className="CasingLabel">
+            {sentence["railgun casing"][lang]}
           </label>
           <input
             style={{ textAlign: "right", marginLeft: "8px" }}
@@ -249,7 +237,7 @@ function Footer(props: FooterProp) {
       </div>
       <div style={{ display: "flex", marginBottom: "8px" }}>
         <label style={{ display: "block", marginLeft: "auto", fontSize: 14 }}>
-          砲弾直径：
+          {sentence["diameter"][lang]}：
           <input
             style={{ textAlign: "right" }}
             defaultValue={props.diameter.toString()}

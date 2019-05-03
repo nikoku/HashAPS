@@ -1,6 +1,7 @@
 import * as React from "react";
 import { render } from "react-dom";
 import AmmoData from "./ammoList";
+import { sentence, lang } from "./sentence";
 
 interface CaluculateSpeedProp {
   diameter: number;
@@ -37,7 +38,7 @@ class CaluculateSpeed extends React.Component<CaluculateSpeedProp> {
     return (
       <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
         <label style={{ whiteSpace: "nowrap", right: 0, fontSize: 14 }}>
-          弾速：
+          {sentence["velocity"][lang]}：
           <input
             type={"number"}
             style={{ textAlign: "right" }}

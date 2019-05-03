@@ -3,6 +3,32 @@
   text-align: center;
 }
 
+.Tabs,
+.TabPanel {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.TabPanel {
+  display: none;
+}
+
+.SelectedTabPanel {
+  display: flex;
+}
+
+.TabList {
+  flex: none;
+}
+
+.CasingLabel {
+  font-size: 12px;
+  white-space: pre;
+  text-align: right;
+}
+
 html,
 body,
 #root {
@@ -15,16 +41,4 @@ body,
   padding: 8px;
   display: flex;
   flex-direction: column;
-}
-
-.Tabs,
-.TabPanel {
-  flex: auto;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.TabList {
-  flex: none;
 }
