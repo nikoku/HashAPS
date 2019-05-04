@@ -23,7 +23,7 @@ class Hash {
   readonly loaderReg = String.raw`([1-6])([123468B])([0-9a-zA-Z]{2})([0-9a-c])`;
   readonly hashReg = new RegExp(`^${this.ammoReg}${this.loaderReg}$`);
   get hash() {
-    const defaultData = ["", "18", "", "a", "0", "0", "1", "1", "0", "0"];
+    const defaultData = ["", "18", "", "a", "0", "0", "1", "1", "1", "0"];
     const data =
       this.hashReg.exec(window.location.hash) ||
       new RegExp(this.ammoReg).exec(window.location.hash) ||
