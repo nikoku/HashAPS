@@ -97,7 +97,6 @@ class LoaderCalculate extends React.Component<
                   ? "red"
                   : undefined
             }}
-            className="rtl"
             defaultValue={this.state.barrelNum.toString()}
             onChange={event => {
               this.setState({ barrelNum: parseInt(event.target.value) });
@@ -120,7 +119,6 @@ class LoaderCalculate extends React.Component<
                   ? "red"
                   : undefined
             }}
-            className="rtl"
             defaultValue={this.state.loaderSize.toString()}
             onChange={event => {
               this.setState({ loaderSize: event.target.value });
@@ -138,7 +136,6 @@ class LoaderCalculate extends React.Component<
         <label style={{ gridRow: "4" }}>
           {sentence["number of autoloaders"]}：
           <input
-            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             max={1000}
@@ -155,7 +152,6 @@ class LoaderCalculate extends React.Component<
         <label style={{ gridRow: "5" }}>
           {sentence["number of clips"]}：
           <input
-            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             max={6}
@@ -176,7 +172,6 @@ class LoaderCalculate extends React.Component<
         <label style={{ gridRow: "1" }}>
           {sentence["reload time"]}：
           <input
-            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled
@@ -191,7 +186,6 @@ class LoaderCalculate extends React.Component<
         <label style={{ gridRow: "2" }}>
           {sentence["cool time"]}：
           <input
-            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled
@@ -206,7 +200,6 @@ class LoaderCalculate extends React.Component<
         <label style={{ gridRow: "3" }}>
           {sentence["fire rate"]}：
           <input
-            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled
@@ -221,7 +214,6 @@ class LoaderCalculate extends React.Component<
         <label style={{ gridRow: "4" }}>
           {sentence["feeder require"]}：
           <input
-            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled
@@ -235,7 +227,6 @@ class LoaderCalculate extends React.Component<
         <label style={{ gridRow: "5" }}>
           {sentence["cooling require"]}：
           <input
-            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled
