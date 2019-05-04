@@ -1,6 +1,7 @@
 import * as React from "react";
 import { render } from "react-dom";
 import AmmoData from "./ammoList";
+import { sentence } from "./sentence";
 
 import "./styles.css";
 
@@ -28,9 +29,9 @@ function AmmoLength(props: AmmoLengthProp) {
   const length = props.ammoDataList.length === 0 ? 0 : getLength();
   return (
     <>
-      <div style={{ textAlign: "right", width: "max-content" }}>
-        <label style={{ whiteSpace: "nowrap", right: 0, fontSize: 14 }}>
-          モジュール：
+      <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
+        <label style={{ whiteSpace: "nowrap", right: 0 }}>
+          {sentence["module"]}：
           <input
             type={"number"}
             style={{ textAlign: "right" }}
@@ -38,12 +39,12 @@ function AmmoLength(props: AmmoLengthProp) {
             disabled={true}
             value={count}
           />
-          [個]
+          [part]
         </label>
       </div>
-      <div style={{ textAlign: "right", width: "max-content" }}>
-        <label style={{ whiteSpace: "nowrap", right: 0, fontSize: 14 }}>
-          弾薬長：
+      <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
+        <label style={{ whiteSpace: "nowrap", right: 0 }}>
+          {sentence["shell length"]}：
           <input
             type={"number"}
             style={{ textAlign: "right" }}
