@@ -40,6 +40,7 @@ class CaluculateSpeed extends React.Component<CaluculateSpeedProp> {
         <label style={{ whiteSpace: "nowrap", right: 0 }}>
           {sentence["velocity"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             readOnly={true}

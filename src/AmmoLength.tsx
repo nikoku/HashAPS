@@ -33,6 +33,7 @@ function AmmoLength(props: AmmoLengthProp) {
         <label style={{ whiteSpace: "nowrap", right: 0 }}>
           {sentence["module"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             readOnly={true}
@@ -46,6 +47,7 @@ function AmmoLength(props: AmmoLengthProp) {
         <label style={{ whiteSpace: "nowrap", right: 0 }}>
           {sentence["shell length"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             readOnly={true}

@@ -2,6 +2,7 @@ import * as React from "react";
 import { render } from "react-dom";
 import AmmoData from "./ammoList";
 import { sentence } from "./sentence";
+import Hash from "./hash";
 
 import "./styles.css";
 
@@ -9,7 +10,26 @@ interface LoaderCalculateProp {
   diameter: number;
   length: number;
 }
-class LoaderCalculate extends React.Component<LoaderCalculateProp> {
+interface LoaderCalculateState {
+  barrelNum: number;
+  loaderSize: string;
+  loaderNum: number;
+  clipNum: number;
+}
+class LoaderCalculate extends React.Component<
+  LoaderCalculateProp,
+  LoaderCalculateState
+> {
+  readonly hash = new Hash();
+  constructor(props: LoaderCalculateProp) {
+    super(props);
+    this.state = {
+      barrelNum: this.hash.barrelNum,
+      loaderSize: this.hash.loaderSize,
+      loaderNum: this.hash.loaderNum,
+      clipNum: this.hash.clipNum
+    };
+  }
   private get maxNumberOfBarrel() {
     const diameter = this.props.diameter;
     if (diameter <= 150) return 6;
@@ -29,41 +49,79 @@ class LoaderCalculate extends React.Component<LoaderCalculateProp> {
       <>
         <label style={{ gridRow: "1" }}>
           {sentence["barrel count"]}：
-          <select>
-            {[...Array(this.maxNumberOfBarrel).keys()].map(e => (
-              <option key={e}>{e + 1}</option>
+          <select
+            style={{
+              color:
+                this.maxNumberOfBarrel < this.state.barrelNum
+                  ? "red"
+                  : undefined
+            }}
+            className="rtl"
+            defaultValue={this.state.barrelNum.toString()}
+            onChange={event => {
+              this.setState({ barrelNum: parseInt(event.target.value) });
+              this.hash.barrelNum = parseInt(event.target.value);
+            }}
+          >
+            {[...Array(6).keys()].map(e => (
+              <option key={e} disabled={e + 1 > this.maxNumberOfBarrel}>
+                {e + 1}
+              </option>
             ))}
           </select>
         </label>
         <label style={{ gridRow: "3" }}>
           {sentence["loader size"]}：
-          <select>
-            {["1", "2", "3", "4", "6", "8", "1(Belt)"]
-              .filter(e => this.minLoaderSize <= parseInt(e))
-              .map(e => (
-                <option key={e}>{e}</option>
-              ))}
+          <select
+            style={{
+              color:
+                parseInt(this.hash.loaderSize) < this.minLoaderSize
+                  ? "red"
+                  : undefined
+            }}
+            className="rtl"
+            defaultValue={this.state.loaderSize.toString()}
+            onChange={event => {
+              this.setState({ loaderSize: event.target.value });
+              this.hash.loaderSize = event.target.value;
+            }}
+          >
+            {["1(Belt)", "1", "2", "3", "4", "6", "8"].map(e => (
+              <option key={e} disabled={this.minLoaderSize > parseInt(e)}>
+                {e}
+              </option>
+            ))}
           </select>
           [m]
         </label>
         <label style={{ gridRow: "4" }}>
           {sentence["number of autoloaders"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
-            defaultValue={"0"}
             max={1000}
             min={0}
+            defaultValue={this.state.loaderNum.toString()}
+            onChange={event => {
+              this.setState({ loaderNum: parseInt(event.target.value) });
+              this.hash.loaderNum = parseInt(event.target.value);
+            }}
           />
         </label>
         <label style={{ gridRow: "5" }}>
           {sentence["number of clips"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
-            defaultValue={"0"}
             max={6}
             min={0}
+            defaultValue={this.state.clipNum.toString()}
+            onChange={event => {
+              this.setState({ clipNum: parseInt(event.target.value) });
+              this.hash.clipNum = parseInt(event.target.value);
+            }}
           />
         </label>
       </>
@@ -75,6 +133,7 @@ class LoaderCalculate extends React.Component<LoaderCalculateProp> {
         <label style={{ gridRow: "1" }}>
           {sentence["reload time"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled
@@ -88,6 +147,7 @@ class LoaderCalculate extends React.Component<LoaderCalculateProp> {
         <label style={{ gridRow: "2" }}>
           {sentence["cool time"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled
@@ -101,6 +161,7 @@ class LoaderCalculate extends React.Component<LoaderCalculateProp> {
         <label style={{ gridRow: "3" }}>
           {sentence["fire rate"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled
@@ -109,11 +170,12 @@ class LoaderCalculate extends React.Component<LoaderCalculateProp> {
             max={2400}
             min={0}
           />
-          [/m]
+          [/min]
         </label>
         <label style={{ gridRow: "4" }}>
           {sentence["feeder require"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled
@@ -126,6 +188,7 @@ class LoaderCalculate extends React.Component<LoaderCalculateProp> {
         <label style={{ gridRow: "5" }}>
           {sentence["cooling require"]}：
           <input
+            className="rtl"
             type={"number"}
             style={{ textAlign: "right" }}
             disabled

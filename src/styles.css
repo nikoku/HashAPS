@@ -29,6 +29,10 @@
   text-align: right;
 }
 
+.rtl {
+  direction: rtl;
+}
+
 html,
 body,
 #root {
