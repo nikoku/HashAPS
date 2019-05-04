@@ -261,7 +261,7 @@ function Footer(props: FooterProp) {
             defaultValue={props.diameter.toString()}
             type={"number"}
             max={500}
-            min={18}
+            min={180}
             onChange={props.onDiameterChange}
           />
           [mm]
