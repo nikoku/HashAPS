@@ -21,7 +21,10 @@ export const sentenceList = {
     ja: "装填時間(ローダー1つあたり)",
     en: "Reload time (a loader)"
   },
-  ["cool time"]: { ja: "冷却時間(1砲身)", en: "Cool time (a barrel)" },
+  ["cool time"]: {
+    ja: "推奨冷却時間(1砲身)",
+    en: "Recommended cool time (a barrel)"
+  },
   ["fire rate"]: { ja: "最高分間投射量", en: "Fire rate(per minute)" },
   ["feeder require"]: {
     ja: "必要フィーダー数(ローダー1つあたり)",

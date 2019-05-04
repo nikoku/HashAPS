@@ -158,6 +158,7 @@ class App extends React.Component<{}, AppState> {
       <LoaderCalculate
         diameter={this.state.diameter}
         length={this.ammoLength}
+        gunpowder={this.state.gunpowder}
       />
     );
   }

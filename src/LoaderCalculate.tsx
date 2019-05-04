@@ -6,9 +6,12 @@ import Hash from "./hash";
 
 import "./styles.css";
 
+const logE092 = Math.log(0.92);
+
 interface LoaderCalculateProp {
   diameter: number;
   length: number;
+  gunpowder: number;
 }
 interface LoaderCalculateState {
   barrelNum: number;
@@ -44,6 +47,44 @@ class LoaderCalculate extends React.Component<
     const requireSize = Math.ceil(length / 1000);
     return requireSize;
   }
+
+  private get ammoVolume() {
+    const diameterM = this.props.diameter / 1000;
+    const ammoVolume = (this.props.length * (Math.PI * diameterM ** 2)) / 4000;
+    return ammoVolume;
+  }
+  private get reloadTime() {
+    const clipNum = this.state.clipNum;
+    const loaderNumBonus = 1.0002 * parseInt(this.state.loaderSize) ** -0.501;
+    const loaderNumPenalty = this.state.loaderNum ** 0.25;
+    const clipNumBonus = clipNum === 0 ? 1 : clipNum ** 0.5;
+    const clipLessPenalty = clipNum === 0 ? 1.5 : 1;
+    const reloadModifier =
+      ((loaderNumBonus * loaderNumPenalty) / clipNumBonus) * clipLessPenalty;
+    const expectedReloadTime = 50 * this.ammoVolume ** 0.5;
+    const reloadTime = expectedReloadTime * reloadModifier;
+    return reloadTime;
+  }
+  private get coolTime() {
+    return (this.reloadTime * this.state.barrelNum) / this.state.loaderNum;
+  }
+  private get fireRate() {
+    return (60 * this.state.barrelNum) / this.coolTime;
+  }
+  private get requiredFeeder() {
+    const supply2clip = 100 * this.ammoVolume ** 0.5;
+    return supply2clip / this.reloadTime;
+  }
+  private get requiredCooling() {
+    const diameterM = this.props.diameter / 1000;
+    const result =
+      Math.log(
+        this.coolTime /
+          (3 * 0.9 * (diameterM / 0.2) ** 1.5 * this.props.gunpowder ** 0.5)
+      ) / logE092;
+    return result > 0 ? result : 0;
+  }
+
   input() {
     return (
       <>
@@ -101,11 +142,13 @@ class LoaderCalculate extends React.Component<
             type={"number"}
             style={{ textAlign: "right" }}
             max={1000}
-            min={0}
-            defaultValue={this.state.loaderNum.toString()}
+            min={1}
+            value={this.state.loaderNum.toString()}
             onChange={event => {
-              this.setState({ loaderNum: parseInt(event.target.value) });
-              this.hash.loaderNum = parseInt(event.target.value);
+              const value = parseInt(event.target.value);
+              const num = value > 0 ? value : 1;
+              this.setState({ loaderNum: num });
+              this.hash.loaderNum = num;
             }}
           />
         </label>
@@ -138,9 +181,10 @@ class LoaderCalculate extends React.Component<
             style={{ textAlign: "right" }}
             disabled
             readOnly
-            value={"1.00"}
+            value={this.reloadTime.toFixed(2)}
             max={1000}
             min={0}
+            step={0.01}
           />
           [s]
         </label>
@@ -152,9 +196,10 @@ class LoaderCalculate extends React.Component<
             style={{ textAlign: "right" }}
             disabled
             readOnly
-            value={"1.00"}
+            value={this.coolTime.toFixed(2)}
             max={1000}
             min={-999}
+            step={0.01}
           />
           [s]
         </label>
@@ -166,9 +211,10 @@ class LoaderCalculate extends React.Component<
             style={{ textAlign: "right" }}
             disabled
             readOnly
-            value={"1.00"}
+            value={this.fireRate.toFixed(2)}
             max={2400}
             min={0}
+            step={0.01}
           />
           [/min]
         </label>
@@ -180,9 +226,10 @@ class LoaderCalculate extends React.Component<
             style={{ textAlign: "right" }}
             disabled
             readOnly
-            value={"1"}
+            value={this.requiredFeeder.toFixed(2)}
             max={12}
             min={0}
+            step={0.01}
           />
         </label>
         <label style={{ gridRow: "5" }}>
@@ -193,9 +240,10 @@ class LoaderCalculate extends React.Component<
             style={{ textAlign: "right" }}
             disabled
             readOnly
-            value={"1"}
+            value={this.requiredCooling.toFixed(2)}
             max={1000}
             min={0}
+            step={0.01}
           />
         </label>
       </>
