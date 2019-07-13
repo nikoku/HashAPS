@@ -33,6 +33,30 @@ export const sentenceList = {
   ["cooling require"]: {
     ja: "必要クーリングユニット数",
     en: "Requirement of guage cooling unit"
+  },
+  ["kd"]: { ja: "KD", en: "Kinetic Damage" },
+  ["ap"]: { ja: "AP", en: "Armor Piercing" },
+  ["he damage"]: { ja: "HE威力", en: "HE damage" },
+  ["he radius"]: { ja: "HE半径", en: "HE radius" },
+  ["he special factor"]: { ja: "HE factor", en: "HE factor" },
+  ["flak damage"]: { ja: "Flak威力", en: "Flak damage" },
+  ["flak radius"]: { ja: "Flak半径", en: "Flak radius" },
+  ["frag count"]: { ja: "Frag子弾数", en: "Frags" },
+  ["frag angle"]: { ja: "Frag角度", en: "Frag angle" },
+  ["frag damage"]: { ja: "Frag威力", en: "Frag damage" },
+  ["optimal barrel(burn)"]: {
+    ja: "要求砲身長(火薬)",
+    en: "optimal barrel(burn)"
+  },
+  ["optimal barrel(accuracy)"]: {
+    ja: "要求砲身長(精度)",
+    en: "optimal barrel(accuracy)"
+  },
+  ["life time"]: { ja: "有効時間", en: "Life time" },
+  ["health"]: { ja: "砲弾HP", en: "bullet health" },
+  ["detection range"]: {
+    ja: "被検知距離(海抜10mから発射)",
+    en: "detection range(fired above 10m sea level)"
   }
 };
 

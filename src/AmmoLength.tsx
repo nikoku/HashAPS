@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render } from "react-dom";
+// import { render } from "react-dom";
 import AmmoData from "./ammoList";
 import { sentence } from "./sentence";
 

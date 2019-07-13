@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render } from "react-dom";
+// import { render } from "react-dom";
 import AmmoData from "./ammoList";
 import { sentence } from "./sentence";
 
@@ -9,6 +9,7 @@ interface CaluculateSpeedProp {
   railgun: number;
   ammoSelectorId: string[];
   ammoDataList: AmmoData[];
+  onSpeedCulc?: (speed: number) => void;
 }
 class CaluculateSpeed extends React.Component<CaluculateSpeedProp> {
   render() {
@@ -35,20 +36,19 @@ class CaluculateSpeed extends React.Component<CaluculateSpeedProp> {
       speedCoefficient
     );
     const speed = gunpowderSpeed.toFixed(2);
+    if (this.props.onSpeedCulc) this.props.onSpeedCulc(gunpowderSpeed);
     return (
-      <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
-        <label style={{ whiteSpace: "nowrap", right: 0 }}>
-          {sentence["velocity"]}：
-          <input
-            type={"number"}
-            style={{ textAlign: "right" }}
-            readOnly={true}
-            disabled={true}
-            value={speed}
-          />
-          [m/s]
-        </label>
-      </div>
+      <label style={{ whiteSpace: "nowrap", right: 0 }}>
+        {sentence["velocity"]}：
+        <input
+          type={"number"}
+          style={{ textAlign: "right" }}
+          readOnly={true}
+          disabled={true}
+          value={speed}
+        />
+        [m/s]
+      </label>
     );
   }
   calcGunpowder(

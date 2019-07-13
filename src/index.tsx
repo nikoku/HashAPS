@@ -8,6 +8,7 @@ import AmmoParret from "./AmmoParret";
 import CaluculateSpeed from "./CaluculateSpeed";
 import AmmoLength from "./AmmoLength";
 import LoaderCalculate from "./LoaderCalculate";
+import SpecCaluculator from "./SpecCalculate";
 import Hash from "./hash";
 import { sentence } from "./sentence";
 
@@ -118,7 +119,7 @@ class App extends React.Component<{}, AppState> {
             }}
             onGunpowderChange={event => {
               const gunpowder: number = limitBetween(
-                parseInt(event.target.value) || 0,
+                parseInt(event.target.value, 10) || 0,
                 0,
                 60
               );
@@ -127,7 +128,7 @@ class App extends React.Component<{}, AppState> {
             }}
             onRailgunChange={event => {
               const railgun: number = limitBetween(
-                parseInt(event.target.value) || 0,
+                parseInt(event.target.value, 10) || 0,
                 0,
                 60
               );
@@ -135,13 +136,16 @@ class App extends React.Component<{}, AppState> {
               this.hash.railgun = railgun;
             }}
           />
-          <CaluculateSpeed
-            diameter={this.state.diameter}
-            gunpowder={this.state.gunpowder}
-            railgun={this.state.railgun}
-            ammoSelectorId={this.state.ammoSelectorId}
-            ammoDataList={this.state.ammoDataList}
-          />
+
+          <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
+            <CaluculateSpeed
+              diameter={this.state.diameter}
+              gunpowder={this.state.gunpowder}
+              railgun={this.state.railgun}
+              ammoSelectorId={this.state.ammoSelectorId}
+              ammoDataList={this.state.ammoDataList}
+            />
+          </div>
           <AmmoLength
             ammoSelectorId={this.state.ammoSelectorId}
             ammoDataList={this.state.ammoDataList}
@@ -150,6 +154,19 @@ class App extends React.Component<{}, AppState> {
           />
         </div>
       </div>
+    );
+  }
+
+  specCaluculator() {
+    return (
+      <SpecCaluculator
+        diameter={this.state.diameter}
+        length={this.ammoLength}
+        gunpowder={this.state.gunpowder}
+        railgun={this.state.railgun}
+        ammoSelectorId={this.state.ammoSelectorId}
+        ammoDataList={this.state.ammoDataList}
+      />
     );
   }
 
@@ -171,10 +188,14 @@ class App extends React.Component<{}, AppState> {
       >
         <TabList className="react-tabs__tab-list TabList">
           <Tab>Customiser</Tab>
+          <Tab>Spec</Tab>
           <Tab>Loader</Tab>
         </TabList>
         <TabPanel className="react-tabs__tab-panel TabPanel">
           {this.ammoCustomiser()}
+        </TabPanel>
+        <TabPanel className="react-tabs__tab-panel TabPanel">
+          {this.specCaluculator()}
         </TabPanel>
         <TabPanel className="react-tabs__tab-panel TabPanel">
           {this.loaderCaluculator()}
@@ -183,6 +204,7 @@ class App extends React.Component<{}, AppState> {
     ) : (
       <div style={{ display: "flex", height: "100%" }}>
         {this.ammoCustomiser()}
+        {this.specCaluculator()}
         {this.loaderCaluculator()}
       </div>
     );

@@ -1,6 +1,6 @@
 import * as React from "react";
-import { render } from "react-dom";
-import AmmoData from "./ammoList";
+// import { render } from "react-dom";
+// import AmmoData from "./ammoList";
 import { sentence } from "./sentence";
 import Hash from "./hash";
 
@@ -55,7 +55,8 @@ class LoaderCalculate extends React.Component<
   }
   private get reloadTime() {
     const clipNum = this.state.clipNum;
-    const loaderNumBonus = 1.0002 * parseInt(this.state.loaderSize) ** -0.501;
+    const loaderNumBonus =
+      1.0002 * parseInt(this.state.loaderSize, 10) ** -0.501;
     const loaderNumPenalty = this.state.loaderNum ** 0.25;
     const clipNumBonus = clipNum === 0 ? 1 : clipNum ** 0.5;
     const clipLessPenalty = clipNum === 0 ? 1.5 : 1;
@@ -99,8 +100,8 @@ class LoaderCalculate extends React.Component<
             }}
             defaultValue={this.state.barrelNum.toString()}
             onChange={event => {
-              this.setState({ barrelNum: parseInt(event.target.value) });
-              this.hash.barrelNum = parseInt(event.target.value);
+              this.setState({ barrelNum: parseInt(event.target.value, 10) });
+              this.hash.barrelNum = parseInt(event.target.value, 10);
             }}
           >
             {[...Array(6).keys()].map(e => (
@@ -115,7 +116,7 @@ class LoaderCalculate extends React.Component<
           <select
             style={{
               color:
-                parseInt(this.hash.loaderSize) < this.minLoaderSize
+                parseInt(this.hash.loaderSize, 10) < this.minLoaderSize
                   ? "red"
                   : undefined
             }}
@@ -126,7 +127,7 @@ class LoaderCalculate extends React.Component<
             }}
           >
             {["1(Belt)", "1", "2", "3", "4", "6", "8"].map(e => (
-              <option key={e} disabled={this.minLoaderSize > parseInt(e)}>
+              <option key={e} disabled={this.minLoaderSize > parseInt(e, 10)}>
                 {e}
               </option>
             ))}
@@ -140,9 +141,9 @@ class LoaderCalculate extends React.Component<
             style={{ textAlign: "right" }}
             max={1000}
             min={1}
-            value={this.state.loaderNum.toString()}
+            defaultValue={this.state.loaderNum.toString()}
             onChange={event => {
-              const value = parseInt(event.target.value);
+              const value = parseInt(event.target.value, 10);
               const num = value > 0 ? value : 1;
               this.setState({ loaderNum: num });
               this.hash.loaderNum = num;
@@ -158,8 +159,8 @@ class LoaderCalculate extends React.Component<
             min={0}
             defaultValue={this.state.clipNum.toString()}
             onChange={event => {
-              this.setState({ clipNum: parseInt(event.target.value) });
-              this.hash.clipNum = parseInt(event.target.value);
+              this.setState({ clipNum: parseInt(event.target.value, 10) });
+              this.hash.clipNum = parseInt(event.target.value, 10);
             }}
           />
         </label>
