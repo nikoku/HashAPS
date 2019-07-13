@@ -250,6 +250,7 @@ function Footer(props: FooterProp) {
         >
           <label className="CasingLabel">{sentence["gunpowder casing"]}</label>
           <input
+            className="rtl"
             style={{
               textAlign: "right",
               marginLeft: "8px",
@@ -263,6 +264,7 @@ function Footer(props: FooterProp) {
           />
           <label className="CasingLabel">{sentence["railgun casing"]}</label>
           <input
+            className="rtl"
             style={{ textAlign: "right", marginLeft: "8px" }}
             defaultValue={props.railgun.toString()}
             type={"number"}
@@ -276,11 +278,12 @@ function Footer(props: FooterProp) {
         <label style={{ display: "block", marginLeft: "auto", fontSize: 14 }}>
           {sentence["diameter"]}：
           <input
+            className="rtl"
             style={{ textAlign: "right" }}
             defaultValue={props.diameter.toString()}
             type={"number"}
             max={500}
-            min={18}
+            min={180}
             onChange={props.onDiameterChange}
           />
           [mm]
