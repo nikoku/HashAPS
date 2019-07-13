@@ -1,11 +1,16 @@
 import * as React from "react";
 import { render } from "react-dom";
-import EventListener from "react-event-listener";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
+import isMobile from "ismobilejs";
 import AmmoData from "./ammoList";
 import AmmoParret from "./AmmoParret";
 import CaluculateSpeed from "./CaluculateSpeed";
 import AmmoLength from "./AmmoLength";
+import LoaderCalculate from "./LoaderCalculate";
+import SpecCaluculator from "./SpecCalculate";
 import Hash from "./hash";
+import { sentence } from "./sentence";
 
 import "./styles.css";
 
@@ -15,7 +20,6 @@ interface AppState {
   gunpowder: number;
   railgun: number;
   ammoDataList: AmmoData[];
-  middleHeight: number;
   visibility:
     | "hidden"
     | "visible"
@@ -37,58 +41,49 @@ class App extends React.Component<{}, AppState> {
       gunpowder: this.hash.gunpowder,
       railgun: this.hash.railgun,
       ammoDataList: [],
-      middleHeight: 0,
       visibility: "hidden"
     };
     AmmoData.fetch((json: AmmoData[]) => {
       this.setState({ ammoDataList: json, visibility: "visible" });
     });
   }
-  componentDidUpdate() {
-    const middleTop = document.getElementById("middle")!.getBoundingClientRect()
-      .top;
-    const fotterTop = document.getElementById("footer")!.getBoundingClientRect()
-      .top;
-    const middleHeight = fotterTop - middleTop;
-    const prevMiddleHeight = this.state.middleHeight;
-    if (middleHeight !== prevMiddleHeight && middleHeight !== 0) {
-      this.setState({ middleHeight: middleHeight });
-    }
+  private get ammoLength() {
+    const ammoList = this.state.ammoSelectorId.map(id =>
+      this.state.ammoDataList.find(data => data.id === id)
+    );
+    return this.state.ammoDataList.length === 0
+      ? 0
+      : ammoList.reduce(
+          (accum, current) =>
+            accum + Math.min(current!.maxLength, this.state.diameter),
+          0
+        ) +
+          (this.state.gunpowder + this.state.railgun) * this.state.diameter;
   }
-  render() {
-    return this.state.ammoDataList.length === 0 ? (
-      <>
-        <Header />
-        <br />
-        <br />
-        <br />
-        <label>Now Loading...</label>
-      </>
-    ) : (
+  ammoCustomiser() {
+    return (
       <div
-        style={{
-          display: "inline-block",
-          position: "relative",
-          marginRight: "8px",
-          height: "100%",
-          width: "max-content"
-        }}
+        style={
+          {
+            display: "flex",
+            flexDirection: "column",
+            flex: "none",
+            position: "relative",
+            marginRight: "8px",
+            width: "max-content",
+            height: "100%"
+          } as React.CSSProperties
+        }
       >
-        <EventListener
-          target="window"
-          onResize={() => this.componentDidUpdate()}
-        />
-        <div>
-          <Header />
-        </div>
         <div
           id="middle"
           style={{
-            top: 0,
-            bottom: 0,
-            height: this.state.middleHeight,
             display: "flex",
-            visibility: this.state.visibility
+            visibility: this.state.visibility,
+            flex: "auto",
+            paddingBottom: 8,
+            bottom: 0,
+            position: "relative"
           }}
         >
           <AmmoParret
@@ -102,14 +97,12 @@ class App extends React.Component<{}, AppState> {
         </div>
         <div
           id="footer"
-          style={{
-            position: "absolute",
-            left: 0,
-            bottom: 0,
-            right: 0,
-            width: "max-content",
-            textAlign: "-webkit-right"
-          }}
+          style={
+            {
+              width: "max-content",
+              flex: "none"
+            } as React.CSSProperties
+          }
         >
           <Footer
             diameter={this.state.diameter}
@@ -126,7 +119,7 @@ class App extends React.Component<{}, AppState> {
             }}
             onGunpowderChange={event => {
               const gunpowder: number = limitBetween(
-                parseInt(event.target.value) || 0,
+                parseInt(event.target.value, 10) || 0,
                 0,
                 60
               );
@@ -135,7 +128,7 @@ class App extends React.Component<{}, AppState> {
             }}
             onRailgunChange={event => {
               const railgun: number = limitBetween(
-                parseInt(event.target.value) || 0,
+                parseInt(event.target.value, 10) || 0,
                 0,
                 60
               );
@@ -143,13 +136,16 @@ class App extends React.Component<{}, AppState> {
               this.hash.railgun = railgun;
             }}
           />
-          <CaluculateSpeed
-            diameter={this.state.diameter}
-            gunpowder={this.state.gunpowder}
-            railgun={this.state.railgun}
-            ammoSelectorId={this.state.ammoSelectorId}
-            ammoDataList={this.state.ammoDataList}
-          />
+
+          <div style={{ margin: "0 0 0 auto", width: "max-content" }}>
+            <CaluculateSpeed
+              diameter={this.state.diameter}
+              gunpowder={this.state.gunpowder}
+              railgun={this.state.railgun}
+              ammoSelectorId={this.state.ammoSelectorId}
+              ammoDataList={this.state.ammoDataList}
+            />
+          </div>
           <AmmoLength
             ammoSelectorId={this.state.ammoSelectorId}
             ammoDataList={this.state.ammoDataList}
@@ -160,10 +156,80 @@ class App extends React.Component<{}, AppState> {
       </div>
     );
   }
+
+  specCaluculator() {
+    return (
+      <SpecCaluculator
+        diameter={this.state.diameter}
+        length={this.ammoLength}
+        gunpowder={this.state.gunpowder}
+        railgun={this.state.railgun}
+        ammoSelectorId={this.state.ammoSelectorId}
+        ammoDataList={this.state.ammoDataList}
+      />
+    );
+  }
+
+  loaderCaluculator() {
+    return (
+      <LoaderCalculate
+        diameter={this.state.diameter}
+        length={this.ammoLength}
+        gunpowder={this.state.gunpowder}
+      />
+    );
+  }
+
+  junctionMobile() {
+    return isMobile.phone ? (
+      <Tabs
+        className="react-tabs Tabs"
+        selectedTabPanelClassName="react-tabs__tab-panel--selected SelectedTabPanel"
+      >
+        <TabList className="react-tabs__tab-list TabList">
+          <Tab>Customiser</Tab>
+          <Tab>Spec</Tab>
+          <Tab>Loader</Tab>
+        </TabList>
+        <TabPanel className="react-tabs__tab-panel TabPanel">
+          {this.ammoCustomiser()}
+        </TabPanel>
+        <TabPanel className="react-tabs__tab-panel TabPanel">
+          {this.specCaluculator()}
+        </TabPanel>
+        <TabPanel className="react-tabs__tab-panel TabPanel">
+          {this.loaderCaluculator()}
+        </TabPanel>
+      </Tabs>
+    ) : (
+      <div style={{ display: "flex", height: "100%" }}>
+        {this.ammoCustomiser()}
+        {this.specCaluculator()}
+        {this.loaderCaluculator()}
+      </div>
+    );
+  }
+  render() {
+    return (
+      <>
+        <Header />
+        {this.state.ammoDataList.length === 0 ? (
+          <>
+            <br />
+            <br />
+            <br />
+            <label>Now Loading...</label>
+          </>
+        ) : (
+          this.junctionMobile()
+        )}
+      </>
+    );
+  }
 }
 
 function Header() {
-  return <>Hash APS(β)</>;
+  return <h1 style={{ flex: "none" }}>Hash APS(β)</h1>;
 }
 
 type ChangeFunctor = (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -182,11 +248,7 @@ function Footer(props: FooterProp) {
         <div
           style={{ display: "flex", marginLeft: "auto", marginBottom: "8px" }}
         >
-          <label style={{ fontSize: 12 }}>
-            Gunpowder
-            <br />
-            Casing
-          </label>
+          <label className="CasingLabel">{sentence["gunpowder casing"]}</label>
           <input
             style={{
               textAlign: "right",
@@ -199,11 +261,7 @@ function Footer(props: FooterProp) {
             min={0}
             onChange={props.onGunpowderChange}
           />
-          <label style={{ fontSize: 12 }}>
-            Railgun
-            <br />
-            Casing
-          </label>
+          <label className="CasingLabel">{sentence["railgun casing"]}</label>
           <input
             style={{ textAlign: "right", marginLeft: "8px" }}
             defaultValue={props.railgun.toString()}
@@ -216,7 +274,7 @@ function Footer(props: FooterProp) {
       </div>
       <div style={{ display: "flex", marginBottom: "8px" }}>
         <label style={{ display: "block", marginLeft: "auto", fontSize: 14 }}>
-          砲弾直径：
+          {sentence["diameter"]}：
           <input
             style={{ textAlign: "right" }}
             defaultValue={props.diameter.toString()}
