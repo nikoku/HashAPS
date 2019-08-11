@@ -235,7 +235,7 @@ class SpecCalculate extends React.Component<
     const ammoIdList = this.ammoList.map(e => e.id);
     const flakCount = ammoIdList.filter(id => ["a", "M"].includes(id)).length;
     const penalty = this.calculatePenalty(ammoIdList);
-    const damage = 120 * (diameter / 0.2) ** 1.95 * flakCount ** 0.65 * penalty;
+    const damage = 150 * (diameter / 0.2) ** 1.95 * flakCount ** 0.65 * penalty;
     return damage;
   }
   flakRadiusCalculator(heDamage: number) {
